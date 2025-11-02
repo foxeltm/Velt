@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.31)
 
 project(Lavendel LANGUAGES CXX)
 
@@ -6,6 +6,7 @@ project(Lavendel LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 # === CONFIGURATIONS ===
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Dist" CACHE STRING "" FORCE)
@@ -18,7 +19,7 @@ if(WIN32)
 else()
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
 # === PLATFORM MACROS ===
@@ -39,11 +40,7 @@ add_compile_definitions(
 )
 
 # === COMPILER WARNINGS & FLAGS ===
-if(MSVC)
-    add_compile_options(/W4 /permissive- /UTF-8)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+add_compile_options(/UTF-8)
 
 # === SUBDIRECTORIES ===
 add_subdirectory(Lavendel)
