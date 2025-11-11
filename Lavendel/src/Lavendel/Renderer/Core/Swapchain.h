@@ -45,7 +45,6 @@ namespace Lavendel {
             void createFramebuffers();
             void createSyncObjects();
 
-            // Helper functions
             VkSurfaceFormatKHR chooseSwapSurfaceFormat(
                 const std::vector<VkSurfaceFormatKHR>& availableFormats);
             VkPresentModeKHR chooseSwapPresentMode(
@@ -69,12 +68,14 @@ namespace Lavendel {
 
             VkSwapchainKHR swapChain;
 
+            // Semaphoren für Acquire (pro Frame-in-Flight)
             std::vector<VkSemaphore> imageAvailableSemaphores;
+            // Semaphoren für Render (pro Swapchain-Image)
             std::vector<VkSemaphore> renderFinishedSemaphores;
+            // Fences (pro Frame-in-Flight)
             std::vector<VkFence> inFlightFences;
             std::vector<VkFence> imagesInFlight;
             size_t currentFrame = 0;
         };
     }
-
-}  // namespace Lavendel
+}

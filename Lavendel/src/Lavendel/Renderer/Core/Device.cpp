@@ -147,7 +147,7 @@ namespace Lavendel {
                 throw std::runtime_error("failed to find GPUs with Vulkan support!");
 				LV_CORE_ERROR("Failed to find GPUs with Vulkan support!");
             }
-            std::cout << "Device count: " << deviceCount << std::endl;
+            LV_CORE_INFO("Device count: {}", deviceCount);
             std::vector<VkPhysicalDevice> devices(deviceCount);
             vkEnumeratePhysicalDevices(m_Instance, &deviceCount, devices.data());
 
@@ -166,7 +166,7 @@ namespace Lavendel {
             }
 
             vkGetPhysicalDeviceProperties(m_PhysicalDevice, &properties);
-            std::cout << "physical device: " << properties.deviceName << std::endl;
+            LV_CORE_INFO("physical device: {}", properties.deviceName);
         }
 
         void GPUDevice::createLogicalDevice()
