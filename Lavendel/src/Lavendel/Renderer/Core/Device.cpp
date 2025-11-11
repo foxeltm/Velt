@@ -110,6 +110,10 @@ namespace Lavendel {
             createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
             createInfo.pApplicationInfo = &appInfo;
 
+#ifdef LV_PLATFORM_OSX
+            createInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+#endif
+
             auto extensions = getRequiredExtensions();
             createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
             createInfo.ppEnabledExtensionNames = extensions.data();
@@ -324,6 +328,10 @@ namespace Lavendel {
             glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
             std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+#ifdef LV_PLATFORM_OSX
+            extensions.push_back("VK_KHR_portability_enumeration");
+#endif
+
 
             if (enableValidationLayers)
             {
