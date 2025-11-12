@@ -2,7 +2,7 @@
 #include "../Core/Device.h"
 
 #define GLM_FORCE_RADIANS
-#DEFINE GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <vector>
 #include <vulkan/vulkan.h>
@@ -14,9 +14,9 @@ namespace  Lavendel
     {
         class Model
         {
+
+
         public:
-            Model(GPUDevice &device, const std::vector<Vertex> &vertices);
-            ~Model();
 
             struct Vertex
             {
@@ -25,6 +25,9 @@ namespace  Lavendel
                 static std::vector<VkVertexInputBindingDescription> getBindingDescription();
                 static std::vector<VkVertexInputAttributeDescription> getAttributeDescription();
             };
+
+            Model(GPUDevice &device, const std::vector<Model::Vertex> &vertices);
+            ~Model();
 
             Model(const Model &) = delete;
             Model &operator=(const Model &) = delete;

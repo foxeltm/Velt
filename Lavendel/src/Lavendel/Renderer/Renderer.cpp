@@ -9,6 +9,7 @@ namespace Lavendel {
 			m_Device = std::make_unique<GPUDevice>(m_Window);
 			m_SwapChain = std::make_unique<SwapChain>(*m_Device, m_Window.getExtent());
 
+			loadModels();
 			createPipelineLayout();
 			createPipeline();
 			createCommandBuffers();
@@ -44,6 +45,18 @@ namespace Lavendel {
 				"shaders/shader.vert.spv",
 				"shaders/shader.frag.spv",
 				pipelineConfig);
+		}
+
+
+		void Renderer::loadModels()
+		{
+			std::vector<Model::Vertex> vertices =
+			{
+				{{0.0f, -1.0f}},
+				{{1.0f, 1.0f}},
+				{{-1.0f, 1.0f}}
+			};
+			m_Model = std::make_shared<Model>(*m_Device, vertices);
 		}
 
 		void Renderer::createCommandBuffers()
@@ -89,7 +102,8 @@ namespace Lavendel {
 				vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 				m_Pipeline->bind(m_CommandBuffers[i]);
-				vkCmdDraw(m_CommandBuffers[i], 3, 1, 0, 0);
+				m_Model->bind(m_CommandBuffers[i]);
+				m_Model->draw(m_CommandBuffers[i]);
 
 				vkCmdEndRenderPass(m_CommandBuffers[i]);
 				if (vkEndCommandBuffer(m_CommandBuffers[i]) != VK_SUCCESS)

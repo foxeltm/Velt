@@ -6,6 +6,7 @@
 #include "Pipeline/Pipeline.h"
 #include "Core/Swapchain.h"
 #include "../Log.h"
+#include "Model/Model.h"
 
 // std
 #include <memory>
@@ -29,6 +30,7 @@ namespace Lavendel
 			void drawFrame();
 
 		private:
+			void loadModels();
 			void createPipelineLayout();
 			void createPipeline();
 			void createCommandBuffers();
@@ -37,6 +39,7 @@ namespace Lavendel
 			std::shared_ptr<GPUDevice> m_Device;
 			std::shared_ptr<SwapChain> m_SwapChain;
 			std::shared_ptr<RenderAPI::Pipeline> m_Pipeline;
+			std::shared_ptr<Model> m_Model;
 			std::vector<VkCommandBuffer> m_CommandBuffers;
 			VkPipelineLayout m_PipelineLayout;
 		};
