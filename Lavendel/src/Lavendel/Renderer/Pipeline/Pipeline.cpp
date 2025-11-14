@@ -92,14 +92,6 @@ namespace Lavendel {
 			
 			VkPipelineViewportStateCreateInfo viewportInfo{};
 
-			// Viewport Info
-			viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-			viewportInfo.viewportCount = 1;
-			viewportInfo.pViewports = &configInfo.viewport;
-			viewportInfo.scissorCount = 1;
-			viewportInfo.pScissors = &configInfo.scissor;
-
-
 			VkGraphicsPipelineCreateInfo pipelineInfo{};
 			pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 			pipelineInfo.stageCount = 2;
@@ -107,12 +99,12 @@ namespace Lavendel {
 			pipelineInfo.pVertexInputState = &vertexInputInfo;
 			// Pass through configInfo data to corresponding members
 			pipelineInfo.pInputAssemblyState = &configInfo.inputAssemblyInfo;
-			pipelineInfo.pViewportState = &viewportInfo;
+			pipelineInfo.pViewportState = &configInfo.viewportInfo;
 			pipelineInfo.pRasterizationState = &configInfo.rasterizationInfo;
 			pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
 			pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
 			pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
-			pipelineInfo.pDynamicState = nullptr;	// Optional
+			pipelineInfo.pDynamicState = &configInfo.dynamicStateInfo;	// Optional
 
 			pipelineInfo.layout = configInfo.pipelineLayout;
 			pipelineInfo.renderPass = configInfo.renderPass;
@@ -142,10 +134,8 @@ namespace Lavendel {
 			}
 		}
 
-		PipelineConfigInfo Pipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height)
+		void Pipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo)
 		{
-			PipelineConfigInfo configInfo{};
-
 			// Input Assembly
 
 			configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -153,16 +143,12 @@ namespace Lavendel {
 			configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
 			// Viewport 
-			configInfo.viewport.x = 0.0f;
-			configInfo.viewport.y = 0.0f;
-			configInfo.viewport.width = static_cast<float>(width);
-			configInfo.viewport.height = static_cast<float>(height);
-			configInfo.viewport.minDepth = 0.0f;
-			configInfo.viewport.maxDepth = 1.0f;
 
-			// Scissor
-			configInfo.scissor.offset = { 0, 0 };
-			configInfo.scissor.extent = { width, height };
+			configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO; // set the struct type member
+			configInfo.viewportInfo.viewportCount = 1;
+			configInfo.viewportInfo.scissorCount = 1;
+			configInfo.viewportInfo.pViewports = nullptr;
+			configInfo.viewportInfo.pScissors = nullptr;
 
 			// Rasterization Info
 			configInfo.rasterizationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO; // set the struct type member
@@ -223,8 +209,15 @@ namespace Lavendel {
 			configInfo.depthStencilInfo.front = {}; // Optional
 			configInfo.depthStencilInfo.back = {};  // Optional
 
+			configInfo.dynamicStatesEnable = {
+				VK_DYNAMIC_STATE_VIEWPORT,
+				VK_DYNAMIC_STATE_SCISSOR
+			};
+			configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO; // set the struct type member
+			configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStatesEnable.data();
+			configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStatesEnable.size());
+			configInfo.dynamicStateInfo.flags = 0;
 
-			return configInfo;
 		}
 
 	}

@@ -14,14 +14,15 @@ namespace Lavendel {
 
 		struct PipelineConfigInfo
 		{
-			VkViewport viewport;
-			VkRect2D scissor;
+			VkPipelineViewportStateCreateInfo viewportInfo;
 			VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
 			VkPipelineRasterizationStateCreateInfo rasterizationInfo;
 			VkPipelineMultisampleStateCreateInfo multisampleInfo;
 			VkPipelineColorBlendAttachmentState colorBlendAttachment;
 			VkPipelineColorBlendStateCreateInfo colorBlendInfo;
 			VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+			std::vector<VkDynamicState> dynamicStatesEnable;
+			VkPipelineDynamicStateCreateInfo dynamicStateInfo;
 			VkPipelineLayout pipelineLayout = nullptr;
 			VkRenderPass renderPass = nullptr;
 			uint32_t subpass = 0;
@@ -50,7 +51,7 @@ namespace Lavendel {
 
 			void bind(VkCommandBuffer commandBuffer);
 
-			static PipelineConfigInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
+			static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
 		private:
 			static std::vector<char> readFile(const std::string& filepath);

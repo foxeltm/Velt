@@ -36,10 +36,11 @@ namespace Lavendel {
 
 		void Renderer::createPipeline()
 		{
-			auto pipelineConfig = Lavendel::RenderAPI::Pipeline::defaultPipelineConfigInfo(m_SwapChain->width(), m_SwapChain->height());
+			PipelineConfigInfo pipelineConfig{};
+			Lavendel::RenderAPI::Pipeline::defaultPipelineConfigInfo(pipelineConfig);
 			pipelineConfig.renderPass = m_SwapChain->getRenderPass();
 			pipelineConfig.pipelineLayout = m_PipelineLayout;
-			m_Pipeline = std::make_unique<Lavendel::RenderAPI::Pipeline>(
+			m_Pipeline = std::make_shared<Lavendel::RenderAPI::Pipeline>(
 				*m_Device,
 				"shaders/shader.vert.spv",
 				"shaders/shader.frag.spv",
@@ -66,8 +67,9 @@ namespace Lavendel {
 				std::shared_ptr<SwapChain> oldSwapChain = std::move(m_SwapChain);
 				m_SwapChain = std::make_shared<SwapChain>(*m_Device, extent, oldSwapChain);
 
-				if (m_SwapChain->imageCount() != oldSwapChain->imageCount())
+				if (m_SwapChain->imageCount() != m_CommandBuffers.size())
 				{
+					freeCommandBuffers(); 
 					createCommandBuffers();
 				}
 			}
@@ -101,6 +103,15 @@ namespace Lavendel {
 			}
 		}
 
+		void Renderer::freeCommandBuffers()
+		{
+			vkFreeCommandBuffers(
+				m_Device->device(),
+				m_Device->getCommandPool(),
+				static_cast<uint32_t>(m_CommandBuffers.size()),
+				m_CommandBuffers.data());
+			m_CommandBuffers.clear();
+		}
 
 		void Renderer::recordCommandBuffer(int imageIndex)
 		{
@@ -127,6 +138,17 @@ namespace Lavendel {
 			renderPassInfo.pClearValues = clearValues.data();
 
 			vkCmdBeginRenderPass(m_CommandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+			VkViewport viewport{};
+			viewport.x = 0.0f;
+			viewport.y = 0.0f;
+			viewport.width = static_cast<float>(m_SwapChain->getSwapChainExtent().width);
+			viewport.height = static_cast<float>(m_SwapChain->getSwapChainExtent().height);
+			viewport.minDepth = 0.0f;
+			viewport.maxDepth = 1.0f;
+			VkRect2D scissor{ {0, 0}, m_SwapChain->getSwapChainExtent()};
+			vkCmdSetViewport(m_CommandBuffers[imageIndex], 0, 1, &viewport);
+			vkCmdSetScissor(m_CommandBuffers[imageIndex], 0, 1, &scissor);
 
 			m_Pipeline->bind(m_CommandBuffers[imageIndex]);
 			m_Model->bind(m_CommandBuffers[imageIndex]);

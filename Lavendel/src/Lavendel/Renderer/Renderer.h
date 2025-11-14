@@ -34,6 +34,7 @@ namespace Lavendel
 			void createPipelineLayout();
 			void createPipeline();
 			void createCommandBuffers();
+			void freeCommandBuffers();
 			void recreateSwapChain();
 			void recordCommandBuffer(int imageIndex);
 			

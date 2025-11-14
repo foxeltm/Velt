@@ -22,6 +22,7 @@ namespace Lavendel {
             : m_Device{ deviceRef }, windowExtent{ windowExtent }, m_OldSwapchain{ previous }
         {
             init();
+			m_OldSwapchain = nullptr;
         }
 
         void SwapChain::init()
