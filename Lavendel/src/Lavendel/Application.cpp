@@ -11,6 +11,10 @@ namespace Lavendel {
 	Application::Application()
 	{
 		m_Renderer = std::make_shared<RenderAPI::Renderer>(m_Window);
+		
+		// Initialize and attach ImGui layer
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -51,9 +55,16 @@ namespace Lavendel {
 		while (!m_Window.ShouldClose())
 		{
 			m_Window.PollEvents();
+			
+			// Begin ImGui frame
+			m_Renderer->beginImGuiFrame();
+			
+			// Update layers
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 			
+			// End ImGui frame and render
+			m_Renderer->endImGuiFrame();
 			m_Renderer->drawFrame();
 		};
 	}

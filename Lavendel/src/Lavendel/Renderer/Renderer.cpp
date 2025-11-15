@@ -14,11 +14,13 @@ namespace Lavendel {
 			createPipelineLayout();
 			recreateSwapChain();
 			createCommandBuffers();
+			initImGui();
 		}
 
 		Renderer::~Renderer()
 		{
 			vkDestroyPipelineLayout(m_Device->device(), m_PipelineLayout, nullptr);
+			m_ImGuiRenderer.Shutdown();
 		}
 
 		void Renderer::createPipelineLayout()
@@ -152,9 +154,14 @@ namespace Lavendel {
 			vkCmdSetViewport(m_CommandBuffers[imageIndex], 0, 1, &viewport);
 			vkCmdSetScissor(m_CommandBuffers[imageIndex], 0, 1, &scissor);
 
+			// Render scene
 			m_Pipeline->bind(m_CommandBuffers[imageIndex]);
 			m_Model->bind(m_CommandBuffers[imageIndex]);
 			m_Model->draw(m_CommandBuffers[imageIndex]);
+
+			// Render ImGui on top of scene
+			if (m_ImGuiInitialized)
+				m_ImGuiRenderer.Render(m_CommandBuffers[imageIndex]);
 
 			vkCmdEndRenderPass(m_CommandBuffers[imageIndex]);
 			if (vkEndCommandBuffer(m_CommandBuffers[imageIndex]) != VK_SUCCESS)
@@ -195,6 +202,36 @@ namespace Lavendel {
 				LV_CORE_ERROR("Failed to present swap chain image!");
 				throw std::runtime_error("Failed to present swap chain image!");
 			}
+		}
+
+		void Renderer::initImGui()
+		{
+			if (m_ImGuiInitialized)
+				return;
+
+			m_ImGuiRenderer.Init(
+				m_Device->getInstance(),
+				m_Device->getPhysicalDevice(),
+				m_Device->device(),
+				m_Device->getGraphicsQueue(),
+				m_Device->getQueueFamilyIndex(),
+				m_SwapChain->getRenderPass()
+			);
+
+			m_ImGuiInitialized = true;
+			LV_CORE_INFO("ImGui initialized successfully");
+		}
+
+		void Renderer::beginImGuiFrame()
+		{
+			if (m_ImGuiInitialized)
+				m_ImGuiRenderer.Begin();
+		}
+
+		void Renderer::endImGuiFrame()
+		{
+			if (m_ImGuiInitialized)
+				m_ImGuiRenderer.End();
 		}
 	}  // namespace RenderAPI
 }

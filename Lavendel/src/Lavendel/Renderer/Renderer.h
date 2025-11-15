@@ -5,6 +5,7 @@
 #include "Pipeline/Pipeline.h"
 #include "Core/Swapchain.h"
 #include "Model/Model.h"
+#include "ImGui/ImGuiRenderer.h"
 
 
 namespace Lavendel
@@ -21,6 +22,12 @@ namespace Lavendel
 			~Renderer();
 			
 			void drawFrame();
+			
+			// ImGui integration
+			void initImGui();
+			void beginImGuiFrame();
+			void endImGuiFrame();
+			ImGuiRenderer& getImGuiRenderer() { return m_ImGuiRenderer; }
 
 		private:
 			void loadModels();
@@ -40,6 +47,8 @@ namespace Lavendel
 			std::shared_ptr<Model> m_Model;
 			std::vector<VkCommandBuffer> m_CommandBuffers;
 			VkPipelineLayout m_PipelineLayout;
+			ImGuiRenderer m_ImGuiRenderer;
+			bool m_ImGuiInitialized = false;
 		};
 	}
 }

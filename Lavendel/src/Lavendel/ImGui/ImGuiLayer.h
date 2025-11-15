@@ -3,6 +3,7 @@
 #include "lvpch.h"
 #include "Lavendel/Layers/Layer.h"
 #include "ImGuiRenderer.h"
+#include "Widgets/DemoWidget.h"
 
 namespace Lavendel {
 	class ImGuiLayer : public Layer
@@ -21,5 +22,6 @@ namespace Lavendel {
 
 	private:
 		ImGuiRenderer m_Renderer;
+		DemoWidget m_DemoWidget;
 	}; 
 }

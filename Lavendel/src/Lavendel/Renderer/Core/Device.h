@@ -49,7 +49,11 @@ namespace Lavendel {
             VkSurfaceKHR surface() { return m_Surface; }
             VkQueue graphicsQueue() { return m_GraphicsQueue; }
             VkQueue presentQueue() { return m_PresentQueue; }
-
+            VkInstance getInstance() { return m_Instance; }
+            VkPhysicalDevice getPhysicalDevice() { return m_PhysicalDevice; }
+            VkQueue getGraphicsQueue() { return m_GraphicsQueue; }
+            uint32_t getQueueFamilyIndex() { return findPhysicalQueueFamilies().graphicsFamily; }
+            
             SwapChainSupportDetails getSwapChainSupport() { return querySwapChainSupport(m_PhysicalDevice); }
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             QueueFamilyIndices findPhysicalQueueFamilies() { return findQueueFamilies(m_PhysicalDevice); }

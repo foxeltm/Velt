@@ -4,6 +4,7 @@
 #include "Renderer/Window.h"
 #include "Renderer/Renderer.h"
 #include "Layers/LayerStack.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace Lavendel
 {	
@@ -34,6 +35,7 @@ namespace Lavendel
 		inline static RenderAPI::Window m_Window{ 800, 600, "Lavendel Window", true };
 		std::shared_ptr<RenderAPI::Renderer> m_Renderer;
 		LayerStack m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer = nullptr;
 	};
 
 	// MUST BE DEFINED IN CLIENT

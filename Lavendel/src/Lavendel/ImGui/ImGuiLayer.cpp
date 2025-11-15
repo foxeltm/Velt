@@ -3,7 +3,7 @@
 #include "Log.h"
 
 namespace Lavendel {
-	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer"), m_DemoWidget("Lavendel Demo")
 	{
 	}
 	
@@ -14,13 +14,10 @@ namespace Lavendel {
 	void ImGuiLayer::OnAttach()
 	{
 		LV_CORE_INFO("ImGuiLayer attached");
-		// Note: Renderer initialization requires Vulkan objects from the application
-		// This should be called after the Renderer is fully initialized
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
-		m_Renderer.Shutdown();
 		LV_CORE_INFO("ImGuiLayer detached");
 	}
 
@@ -33,7 +30,8 @@ namespace Lavendel {
 
 	void ImGuiLayer::OnUpdate()
 	{
-		// ImGui rendering happens in Begin/End calls
+		// Render demo widget
+		m_DemoWidget.OnRender();
 	}
 
 	void ImGuiLayer::Begin()
