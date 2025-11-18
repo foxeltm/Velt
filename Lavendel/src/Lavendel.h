@@ -2,6 +2,7 @@
 
 // ====== CORE INCLUDES ====== //
 #include "Lavendel/Core.h"
+#include "Lavendel/Layers/Layer.h"
 
 // ====== APPLICATION INCLUDES ====== //
 #include "Lavendel/Application.h"
@@ -11,3 +12,6 @@
 
 // ====== ENTRYPOINT INCLUDES ====== //
 #include "Lavendel/Entrypoint.h"
+
+
+#include "Lavendel/ImGui/ImGuiLayer.h"

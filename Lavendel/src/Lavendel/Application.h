@@ -4,6 +4,7 @@
 #include "Renderer/Window.h"
 #include "Renderer/Renderer.h"
 #include "Layers/LayerStack.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace Lavendel
 {	
@@ -18,6 +19,7 @@ namespace Lavendel
 			virtual ~Application();
 			void Run();
 
+			void OnEvent(Event& e);
 			void operator=(const Application&) = delete;
 
 			static constexpr int WIDTH = 1280;
@@ -26,6 +28,8 @@ namespace Lavendel
 
 			static RenderAPI::Window& getWindow() { return m_Window; };
 
+	
+
 			void PushLayer(Layer* layer);
 			void PushOverlay(Layer* overlay);
 
@@ -33,6 +37,7 @@ namespace Lavendel
 		inline static RenderAPI::Window m_Window{ 800, 600, "Lavendel Window", true };
 		std::shared_ptr<RenderAPI::Renderer> m_Renderer;
 		LayerStack m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer = nullptr;
 	};
 
 	// MUST BE DEFINED IN CLIENT

@@ -5,7 +5,9 @@
 #include <string>
 #include <functional>
 
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
+// Macro to implement event type helpers inside event subclasses.
+// Do NOT use token-pasting (##) here; simply refer to the enum member.
+#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
 
@@ -40,6 +42,8 @@ namespace Lavendel {
 	{
 		friend class EventDispatcher;
 	public: 
+
+
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
@@ -48,6 +52,7 @@ namespace Lavendel {
 		{
 			return GetCategoryFlags() & category;
 		}
+		inline bool IsHandled() const { return m_Handled; }
 	protected:
 		bool m_Handled = false;
 	};
@@ -61,7 +66,6 @@ namespace Lavendel {
 	public:
 		EventDispatcher(Event& event) : m_Event(event)
 		{
-
 		}
 
 		template<typename T>
@@ -77,4 +81,9 @@ namespace Lavendel {
 	private:
 		Event& m_Event;
 	};
+
+	inline std::ostream& operator<<(std::ostream& os, const Event& e)
+	{
+		return os << e.ToString();
+	}
 }
