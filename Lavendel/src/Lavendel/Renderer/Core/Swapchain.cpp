@@ -64,10 +64,16 @@ namespace Lavendel {
 
             vkDestroyRenderPass(m_Device.device(), renderPass, nullptr);
 
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+            // Destroy semaphores - one per swapchain image
+            for (size_t i = 0; i < imageAvailableSemaphores.size(); i++)
             {
                 vkDestroySemaphore(m_Device.device(), renderFinishedSemaphores[i], nullptr);
                 vkDestroySemaphore(m_Device.device(), imageAvailableSemaphores[i], nullptr);
+            }
+
+            // Destroy fences - one per frame in flight
+            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+            {
                 vkDestroyFence(m_Device.device(), inFlightFences[i], nullptr);
             }
         }
@@ -82,6 +88,7 @@ namespace Lavendel {
                 VK_TRUE,
                 std::numeric_limits<uint64_t>::max());
 
+            // Use currentFrame semaphore, imageIndex will be filled by vkAcquireNextImageKHR
             VkResult result = vkAcquireNextImageKHR(
                 m_Device.device(),
                 m_Swapchain,
@@ -106,6 +113,7 @@ namespace Lavendel {
             VkSubmitInfo submitInfo = {};
             submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
+            // Wait on the semaphore that was signaled when acquiring this image (indexed by currentFrame)
             VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
             VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
             submitInfo.waitSemaphoreCount = 1;
@@ -115,6 +123,7 @@ namespace Lavendel {
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = buffers;
 
+            // Signal with semaphore indexed by currentFrame (will be waited on by presentation)
             VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
@@ -381,6 +390,7 @@ namespace Lavendel {
         void SwapChain::createSyncObjects()
         {
             LV_PROFILE_FUNCTION();
+            // Create one semaphore pair per frame in flight
             imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
             renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
             inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
@@ -393,6 +403,7 @@ namespace Lavendel {
             fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
             fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
+            // Create semaphores for each frame in flight
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
             {
                 if (vkCreateSemaphore(m_Device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) !=
