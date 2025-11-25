@@ -2,6 +2,7 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 
 #include "lvpch.h"
+#include "Core.h"
 #include "Renderer.h"
 #include "Pipeline/Pipeline.h"
 #include "Lavendel/ImGui/ImGuiLayer.h"
@@ -12,9 +13,9 @@
 // definition in a .cpp file to satisfy the linker. They are used to provide
 // global-ish access to the GPU device, swapchain and pipeline owned by the
 // renderer instance.
-std::shared_ptr<Lavendel::RenderAPI::GPUDevice> Lavendel::RenderAPI::Renderer::m_Device = nullptr;
-std::shared_ptr<Lavendel::RenderAPI::SwapChain> Lavendel::RenderAPI::Renderer::m_SwapChain = nullptr;
-std::shared_ptr<Lavendel::RenderAPI::Pipeline> Lavendel::RenderAPI::Renderer::m_Pipeline = nullptr;
+std::unique_ptr<Lavendel::RenderAPI::GPUDevice> Lavendel::RenderAPI::Renderer::m_Device = nullptr;
+std::unique_ptr<Lavendel::RenderAPI::SwapChain> Lavendel::RenderAPI::Renderer::m_SwapChain = nullptr;
+std::unique_ptr<Lavendel::RenderAPI::Pipeline> Lavendel::RenderAPI::Renderer::m_Pipeline = nullptr;
 
 namespace Lavendel {
 	namespace RenderAPI {
@@ -31,7 +32,7 @@ namespace Lavendel {
 			LV_PROFILE_FUNCTION();
 			LV_CORE_INFO("Initializing Renderer...");
 
-			m_Device = std::make_shared<GPUDevice>(m_Window);
+			m_Device = CreateScope<GPUDevice>(m_Window);
 			loadModels();
 			createPipelineLayout();
 			recreateSwapChain();
@@ -72,22 +73,19 @@ namespace Lavendel {
 			Lavendel::RenderAPI::Pipeline::defaultPipelineConfigInfo(pipelineConfig);
 			pipelineConfig.renderPass = m_SwapChain->getRenderPass();
 			pipelineConfig.pipelineLayout = m_PipelineLayout;
-			m_Pipeline = std::make_shared<Lavendel::RenderAPI::Pipeline>(
+			m_Pipeline = CreateScope<Lavendel::RenderAPI::Pipeline>(
 				*m_Device,
 				"shaders/shader.vert.spv",
 				"shaders/shader.frag.spv",
 				pipelineConfig);
 		}
 
-		void Renderer::shutdown() 
+		void Renderer::Shutdown() 
 		{
 			LV_PROFILE_FUNCTION();
 			LV_CORE_INFO("Renderer shutdown");
 
-			if (m_Device)
-			{
-				vkDeviceWaitIdle(m_Device->device());
-			}
+			vkDeviceWaitIdle(m_Device->device());
 
 			m_Pipeline = nullptr;   
 			m_SwapChain = nullptr;       
@@ -110,12 +108,12 @@ namespace Lavendel {
 
 			if (m_SwapChain == nullptr)
 			{
-				m_SwapChain = std::make_shared<SwapChain>(*m_Device, extent);
+				m_SwapChain = CreateScope<SwapChain>(*m_Device, extent);
 			}
 			else
 			{
 				std::shared_ptr<SwapChain> oldSwapChain = std::move(m_SwapChain);
-				m_SwapChain = std::make_shared<SwapChain>(*m_Device, extent, oldSwapChain);
+				m_SwapChain = CreateScope<SwapChain>(*m_Device, extent, oldSwapChain);
 
 				if (m_SwapChain->imageCount() != m_CommandBuffers.size())
 				{

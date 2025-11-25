@@ -42,9 +42,9 @@ namespace Lavendel {
 		ImGuiRenderer& GetRenderer() { return *m_Renderer; }
 
 	private:
-		std::shared_ptr<ImGuiRenderer> m_Renderer;
+		Ref<ImGuiRenderer> m_Renderer;
 
-		std::shared_ptr<RenderAPI::GPUDevice> m_Device;
+		Scope<RenderAPI::GPUDevice> m_Device;
 
 		DemoWidget m_DemoWidget;
 

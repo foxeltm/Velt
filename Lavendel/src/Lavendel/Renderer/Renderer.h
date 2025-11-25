@@ -21,17 +21,20 @@ namespace Lavendel
 		public:
 			Renderer(Window& window);
 			~Renderer();
+
+			Renderer(const Window&) = delete;
+			Renderer& operator=(const Window&) = delete;
 			
 			void drawFrame();
 			
 			void setImGuiLayer(ImGuiLayer* layer) { m_ImGuiLayer = layer; }
 			void setLayerStack(LayerStack* layerStack) { m_LayerStack = layerStack; }
 			void renderImGui(VkCommandBuffer commandBuffer);
-			void shutdown();
+			static void Shutdown();
 
-			inline static const std::shared_ptr<GPUDevice> getDevice() { return m_Device; }
-			inline static const std::shared_ptr<SwapChain> getSwapChain()  { return m_SwapChain; }
-			inline static const std::shared_ptr<Pipeline> getPipeline() { return m_Pipeline; }
+			inline static const Scope<GPUDevice>& getDevice() { return m_Device; }
+			inline static const Scope<SwapChain>& getSwapChain()  { return m_SwapChain; }
+			inline static const Scope<Pipeline>& getPipeline() { return m_Pipeline; }
 
 		private:
 			void loadModels();
@@ -44,9 +47,9 @@ namespace Lavendel
 			
 
 			Window& m_Window;
-			static std::shared_ptr<GPUDevice> m_Device;
-			static std::shared_ptr<SwapChain> m_SwapChain;
-			static std::shared_ptr<RenderAPI::Pipeline> m_Pipeline;
+			static Scope<GPUDevice> m_Device;
+			static Scope<SwapChain> m_SwapChain;
+			static Scope<RenderAPI::Pipeline> m_Pipeline;
 			std::shared_ptr<Model> m_Model;
 			std::vector<VkCommandBuffer> m_CommandBuffers;
 			VkPipelineLayout m_PipelineLayout;

@@ -10,7 +10,9 @@
 #else
 	#define LAVENDEL_API
 #endif
-namespace Hazel {
+
+
+namespace Lavendel {
 
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
@@ -29,4 +31,6 @@ namespace Hazel {
 	}
 
 }
+
+
 #define BIT(x) (1 << x)

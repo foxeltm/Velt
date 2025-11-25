@@ -15,15 +15,13 @@ namespace Lavendel {
                     static void Init();
 
                     inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() {
-                        if (s_CoreLogger == null)
-                                assert("CoreLogger is null")
-                                return; 
+                        if (s_CoreLogger == nullptr)
+                            assert("CoreLogger is null");
                         return s_CoreLogger; 
                     }
                     inline static std::shared_ptr<spdlog::logger>& GetClientLogger() {
-                        if (s_ClientLogger == null)
-                                assert("ClientLogger is null")
-                                return;
+                        if (s_ClientLogger == nullptr)
+                            assert("ClientLogger is null");
                         return s_ClientLogger; 
                 }
                     private:

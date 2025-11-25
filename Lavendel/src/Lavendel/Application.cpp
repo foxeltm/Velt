@@ -5,6 +5,7 @@
 #include <SDL3/SDL.h>
 #include "ImGui/ImGuiLayer.h"
 #include "Events/ApplicationEvent.h" // Import WindowCloseEvent / WindowResizeEvent
+#include <cassert>
 
 // CONSTRUCTOR 
 namespace Lavendel {
@@ -21,7 +22,6 @@ namespace Lavendel {
 	{
 		LV_PROFILE_FUNCTION();
 	
-		m_Renderer->shutdown();
 
 	}
 
@@ -64,16 +64,29 @@ namespace Lavendel {
 		bool running = true;
 		while (running)
 		{
+
 			LV_PROFILE_SCOPE("Application::Run Loop");
 			SDL_Event event;
 			while (SDL_PollEvent(&event))
 			{
 				LV_PROFILE_SCOPE("SDL PollEvent Loop");
+				
+				if (m_Renderer->getDevice() == nullptr)
+				{
+					assert("Device (GPUDevice in class Renderer) is null");
+				}
+
+				if (m_Renderer->getDevice()->device() == nullptr)
+				{
+					assert("Device (VkDevice) is null");
+				}
+
 				// First, give ImGui a chance to process the raw SDL event. ImGui's
 				// backend will update its IO state (mouse/keyboard) and set capture
 				// flags so widgets become interactive.
 				if (m_ImGuiLayer)
 					ImGuiLayer::ProcessSDLEvent(&event);
+
 
 				// Then translate a small subset of SDL events into the engine's
 				// Event classes so other layers can react (window close / resize).
@@ -122,10 +135,6 @@ namespace Lavendel {
 			vkDeviceWaitIdle(RenderAPI::Renderer::getDevice()->device());
 		}
 
-		if (m_ImGuiLayer) {
-			m_ImGuiLayer = nullptr;
-		}
-
+		RenderAPI::Renderer::Shutdown();
 	}
-
 }

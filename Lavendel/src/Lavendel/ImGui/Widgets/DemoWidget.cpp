@@ -1,4 +1,5 @@
 #include "lvpch.h"
+#include "Renderer/Renderer.h"
 #include "DemoWidget.h"
 
 namespace Lavendel {
@@ -41,6 +42,11 @@ namespace Lavendel {
 			// Text input
 			ImGui::InputText("Text Input", m_TextBuffer, sizeof(m_TextBuffer));
 
+
+			if (ImGui::Button("Shutdown", ImVec2(120, 0))) 
+			{
+				RenderAPI::Renderer::Shutdown();
+			}
 			// Buttons
 			ImGui::Separator();
 			if (ImGui::Button("Click Me!", ImVec2(120, 0)))

@@ -29,15 +29,15 @@ namespace Lavendel {
 	{
 		LV_PROFILE_FUNCTION();
 		// Use static accessors from Renderer to get device and swapchain
-		auto swapchain = Lavendel::RenderAPI::Renderer::getSwapChain();
-		auto device = Lavendel::RenderAPI::Renderer::getDevice();
+		auto& swapchain = Lavendel::RenderAPI::Renderer::getSwapChain();
+		auto& device = Lavendel::RenderAPI::Renderer::getDevice();
 		SDL_Window* window = nullptr;
 		if (device)
 		{
 			window = reinterpret_cast<SDL_Window*>(device->getWindow().GetNativeHandle());
 		}
 
-		m_Renderer = std::make_shared<ImGuiRenderer>(
+		m_Renderer = CreateRef<ImGuiRenderer>(
 			swapchain,
 			device,
 			window

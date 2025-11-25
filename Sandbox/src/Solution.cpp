@@ -1,4 +1,5 @@
 #include <Lavendel.h>
+#include <ImGui/ImGuiLayer.h>
 
 class ExampleLayer : public Lavendel::Layer
 {
@@ -14,6 +15,15 @@ class ExampleLayer : public Lavendel::Layer
 		LV_PROFILE_FUNCTION();
 		LV_CORE_INFO("{0}", event.ToString());
 	}
+
+	void OnRender() 
+	{
+		LV_PROFILE_FUNCTION();
+		//LV_CORE_INFO("ExampleLayer::OnRender");
+
+		ImGui::Begin("Hello from ExampleLayer");
+
+	}
 }; 
 
 
@@ -25,8 +35,11 @@ public:
 		{
 			LV_PROFILE_FUNCTION();
 			PushLayer(new ExampleLayer());
-			PushLayer(new Lavendel::ImGuiLayer());
+			PushOverlay(new Lavendel::ImGuiLayer());
+
 		}
+
+
 		~Sandbox() { LV_PROFILE_FUNCTION(); }
 };
 
