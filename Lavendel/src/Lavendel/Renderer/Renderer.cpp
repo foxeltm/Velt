@@ -8,6 +8,7 @@
 #include "Lavendel/ImGui/ImGuiLayer.h"
 #include "Lavendel/Layers/LayerStack.h"
 #include "Lavendel/Layers/Layer.h"
+#include "Lavendel/Application.h"
 
 
 namespace Lavendel {
@@ -87,20 +88,6 @@ namespace Lavendel {
 				"shaders/shader.vert.spv",
 				"shaders/shader.frag.spv",
 				pipelineConfig);
-		}
-
-		void Renderer::Shutdown() 
-		{
-			LV_PROFILE_FUNCTION();
-			LV_CORE_INFO("Renderer shutdown");
-
-			vkDeviceWaitIdle(m_Device->device());
-
-			m_Pipeline = nullptr;   
-			m_SwapChain = nullptr;       
-			m_Device = nullptr;         
-
-			LV_CORE_INFO("Renderer shutdown complete");
 		}
 
 		void Renderer::recreateSwapChain()
@@ -307,6 +294,29 @@ namespace Lavendel {
 				m_ImGuiLayer->GetRenderer().Render(commandBuffer);
 			}
 		}
+
+
+		void Renderer::Shutdown()
+		{
+			LV_PROFILE_FUNCTION();
+			LV_CORE_INFO("Renderer shutdown");
+
+			vkDeviceWaitIdle(m_Device->device());
+
+			m_Pipeline = nullptr;
+			m_SwapChain = nullptr;
+			m_Device = nullptr;
+
+			LV_CORE_INFO("Renderer shutdown complete");
+		}
+
+		void Renderer::requestShutdown()
+		{
+			Application::s_ShutdownRequested = true;
+		}
+
+
+
 
 	}  // namespace RenderAPI
 }  // namespace Lavendel

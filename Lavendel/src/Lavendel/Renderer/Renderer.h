@@ -30,6 +30,7 @@ namespace Lavendel
 			void setImGuiLayer(ImGuiLayer* layer) { m_ImGuiLayer = layer; }
 			void setLayerStack(LayerStack* layerStack) { m_LayerStack = layerStack; }
 			void renderImGui(VkCommandBuffer commandBuffer);
+			static void requestShutdown();
 			static void Shutdown();
 
 			inline static GPUDevice* getDevice() { return m_Device; }
