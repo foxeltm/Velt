@@ -1,7 +1,8 @@
+#include "vtpch.h"
 #include "VulkanFramebuffer.h"
 #include <stdexcept>
 
-namespace Velt::Vulkan {
+namespace Velt::Renderer::Vulkan {
 
 VkFormat VulkanFramebuffer::FramebufferTextureFormatToVulkan(
     FramebufferTextureFormat format) {
@@ -402,8 +403,10 @@ void VulkanFramebuffer::BeginRenderPass(VkCommandBuffer commandBuffer) {
   vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 }
 
-void VulkanFramebuffer::EndRenderPass(VkCommandBuffer commandBuffer) {
-  vkCmdEndRenderPass(commandBuffer);
+// we are taking in a void* because it needs to be compatible with the base / the other apis 
+void VulkanFramebuffer::EndRenderPass(void* commandBuffer)
+{
+  vkCmdEndRenderPass(reinterpret_cast<VkCommandBuffer>(commandBuffer));
 }
 
 void VulkanFramebuffer::Resize(u32 width, u32 height) {

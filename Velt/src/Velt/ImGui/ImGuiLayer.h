@@ -5,7 +5,7 @@
 #include "ImGuiRenderer.h"
 #include "Widgets/DemoWidget.h"
 
-#include "Velt/Renderer/Core/Device.h"	
+#include "Velt/Platform/Vulkan/VulkanDevice.h"	
 #include "Velt/Renderer/Renderer.h"
 
 struct SDL_Window;
@@ -44,7 +44,7 @@ namespace Velt {
 	private:
 		Ref<ImGuiRenderer> m_Renderer;
 
-		Scope<RenderAPI::GPUDevice> m_Device;
+		Scope<Renderer::Vulkan::VulkanDevice> m_Device;
 
 		DemoWidget m_DemoWidget;
 
