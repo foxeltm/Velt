@@ -82,8 +82,8 @@ void Application::Run() {
       case SDL_EVENT_WINDOW_RESIZED:
       case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
         VT_PROFILE_SCOPE("WindowResize Event");
-        uint16_t w = (uint16_t)event.window.data1;
-        uint16_t h = (uint16_t)event.window.data2;
+        u16 w = (u16)event.window.data1;
+        u16 h = (u16)event.window.data2;
         WindowResizeEvent e(w, h);
         OnEvent(e);
       } break;

@@ -19,7 +19,7 @@ public:
 	virtual const FramebufferSpecification& GetSpecification() const = 0;
 	virtual void Resize(u32 width, u32 height) = 0;
 	virtual int ReadPixel(u32 attachmentIndex, int x, int y) = 0;
-	virtual void ClearAttachment(uint32_t attachmentIndex, int value) = 0;
+	virtual void ClearAttachment(u32 attachmentIndex, int value) = 0;
 	virtual void BeginRenderPass(void* commandBuffer) = 0;
 	virtual void EndRenderPass(void* commandBuffer) = 0;
 	virtual void* GetNativeHandle() = 0;

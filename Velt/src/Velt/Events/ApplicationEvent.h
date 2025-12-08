@@ -10,10 +10,10 @@ namespace Velt {
 	{
 
 		public:
-			WindowResizeEvent(uint16_t width, uint16_t height) : m_Width(width), m_Height(height){}
+			WindowResizeEvent(u16 width, u16 height) : m_Width(width), m_Height(height){}
 
-			inline uint16_t GetWidth() const { return m_Width; }
-			inline uint16_t GetHeight() const { return m_Height; }
+			inline u16 GetWidth() const { return m_Width; }
+			inline u16 GetHeight() const { return m_Height; }
 
 			std::string ToString() const override
 			{
@@ -27,7 +27,7 @@ namespace Velt {
 			EVENT_CLASS_CATEGORY(EventCategoryApplication);
 	
 	private:
-		uint16_t m_Width, m_Height;
+		u16 m_Width, m_Height;
 
 	};
 

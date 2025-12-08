@@ -20,7 +20,7 @@ namespace Velt::Renderer::Vulkan
         void Model::createVertexBuffers(const std::vector<Model::Vertex>& vertecies)
         {
             VT_PROFILE_FUNCTION();
-            m_VertexCount = static_cast<uint32_t>(vertecies.size());
+            m_VertexCount = static_cast<u32>(vertecies.size());
 
             if (m_VertexCount < 3)
             {

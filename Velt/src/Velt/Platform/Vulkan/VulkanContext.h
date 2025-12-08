@@ -4,6 +4,7 @@
 #include "Velt/Platform/Vulkan/VulkanDevice.h"
 #include "Velt/Renderer/RenderContext.h"
 #include "Velt/Platform/Vulkan/VulkanSwapchain.h"
+#include "Velt/Platform/Vulkan/VulkanPipeline.h"
 
 
 namespace Velt::Renderer::Vulkan
@@ -17,9 +18,11 @@ namespace Velt::Renderer::Vulkan
 		virtual void Init() override;
 		static std::weak_ptr<VulkanDevice> getDevice() { return s_Device; }
 		static std::weak_ptr<VulkanSwapchain> getSwapchain() { return s_Swapchain; }
+		static std::weak_ptr<VulkanPipeline> getPipeline() { return s_Pipeline; }
 
 	private:
 		static std::weak_ptr<VulkanDevice> s_Device;
 		static std::weak_ptr<VulkanSwapchain> s_Swapchain;
+		static std::weak_ptr<VulkanPipeline> s_Pipeline;
 	};
 }

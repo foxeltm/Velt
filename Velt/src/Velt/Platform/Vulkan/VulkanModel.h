@@ -35,7 +35,7 @@ namespace  Velt::Renderer::Vulkan
 
             virtual void Bind(void* commandBuffer) override;
             virtual void Draw(void* commandBuffer) override;
-            virtual uint32_t GetVertexCount() const override { return m_VertexCount; }
+            virtual u32 GetVertexCount() const override { return m_VertexCount; }
 
             void bind(VkCommandBuffer commandBuffer);
             void draw(VkCommandBuffer commandBuffer);
@@ -47,7 +47,7 @@ namespace  Velt::Renderer::Vulkan
             VulkanDevice &m_Device;
             VkBuffer m_VertexBuffer;
             VkDeviceMemory m_VertexBufferMemory;
-            uint32_t m_VertexCount;
+            u32 m_VertexCount;
         };
   }
 

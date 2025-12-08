@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef vt_PLATFORM_WIN32
+#ifdef VT_PLATFORM_WIN32
 #include <Windows.h>
 #endif
 

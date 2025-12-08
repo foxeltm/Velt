@@ -81,7 +81,7 @@ namespace Velt::Renderer::Vulkan {
             }
         }
 
-        VkResult VulkanSwapchain::acquireNextImage(uint32_t &imageIndex)
+        VkResult VulkanSwapchain::acquireNextImage(u32 &imageIndex)
         {
             VT_PROFILE_FUNCTION();
             vkWaitForFences(
@@ -105,7 +105,7 @@ namespace Velt::Renderer::Vulkan {
 
 
         VkResult VulkanSwapchain::submitCommandBuffers(
-            const VkCommandBuffer* buffers, uint32_t* imageIndex)
+            const VkCommandBuffer* buffers, u32* imageIndex)
         {
             VT_PROFILE_FUNCTION();
             if (imagesInFlight[*imageIndex] != VK_NULL_HANDLE)
@@ -164,7 +164,7 @@ namespace Velt::Renderer::Vulkan {
             VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
             VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
 
-            uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
+            u32 imageCount = swapChainSupport.capabilities.minImageCount + 1;
             if (swapChainSupport.capabilities.maxImageCount > 0 &&
                 imageCount > swapChainSupport.capabilities.maxImageCount)
             {
@@ -183,7 +183,7 @@ namespace Velt::Renderer::Vulkan {
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
             QueueFamilyIndices indices = m_Device.findPhysicalQueueFamilies();
-            uint32_t queueFamilyIndices[] = { indices.graphicsFamily, indices.presentFamily };
+            u32 queueFamilyIndices[] = { indices.graphicsFamily, indices.presentFamily };
 
             if (indices.graphicsFamily != indices.presentFamily)
             {
@@ -295,7 +295,7 @@ namespace Velt::Renderer::Vulkan {
             std::array<VkAttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
             VkRenderPassCreateInfo renderPassInfo = {};
             renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-            renderPassInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+            renderPassInfo.attachmentCount = static_cast<u32>(attachments.size());
             renderPassInfo.pAttachments = attachments.data();
             renderPassInfo.subpassCount = 1;
             renderPassInfo.pSubpasses = &subpass;
@@ -320,7 +320,7 @@ namespace Velt::Renderer::Vulkan {
                 VkFramebufferCreateInfo framebufferInfo = {};
                 framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
                 framebufferInfo.renderPass = renderPass;
-                framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+                framebufferInfo.attachmentCount = static_cast<u32>(attachments.size());
                 framebufferInfo.pAttachments = attachments.data();
                 framebufferInfo.width = swapChainExtent.width;
                 framebufferInfo.height = swapChainExtent.height;
@@ -455,7 +455,7 @@ namespace Velt::Renderer::Vulkan {
         VkExtent2D VulkanSwapchain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
         {
             VT_PROFILE_FUNCTION();
-            if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
+            if (capabilities.currentExtent.width != std::numeric_limits<u32>::max())
             {
                 return capabilities.currentExtent;
             }

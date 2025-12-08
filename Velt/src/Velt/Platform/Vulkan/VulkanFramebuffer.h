@@ -41,14 +41,14 @@ public:
 
   virtual void Resize(u32 width, u32 height) override;
   virtual int ReadPixel(u32 attachmentIndex, int x, int y) override;
-  virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
+  virtual void ClearAttachment(u32 attachmentIndex, int value) override;
   virtual void* GetNativeHandle() override { return m_Framebuffer; }
 
   virtual const FramebufferSpecification &GetSpecification() const override {
     return m_Specification;
   }
 
-  VkImageView GetColorImageView(uint32_t index = 0) const {
+  VkImageView GetColorImageView(u32 index = 0) const {
     assert(index < m_ColorImageViews.size());
     return m_ColorImageViews[index];
   }
@@ -57,7 +57,7 @@ public:
   VkRenderPass GetRenderPass() const { return m_RenderPass; }
   VkFramebuffer GetVkFramebuffer() const { return m_Framebuffer; }
 
-  VkImage GetColorImage(uint32_t index = 0) const {
+  VkImage GetColorImage(u32 index = 0) const {
     assert(index < m_ColorImages.size());
     return m_ColorImages[index];
   }
@@ -71,7 +71,7 @@ private:
   void CreateFramebuffer();
   void Cleanup();
 
-  uint32_t FindMemoryType(uint32_t typeFilter,
+  u32 FindMemoryType(u32 typeFilter,
                           VkMemoryPropertyFlags properties);
 
   static VkFormat
@@ -103,7 +103,7 @@ private:
   VkCommandPool m_CommandPool = VK_NULL_HANDLE;
   VkQueue m_GraphicsQueue = VK_NULL_HANDLE;
 
-  static constexpr uint32_t s_MaxFramebufferSize = 8192;
+  static constexpr u32 s_MaxFramebufferSize = 8192;
 };
 
 } // namespace Velt::RenderAPI

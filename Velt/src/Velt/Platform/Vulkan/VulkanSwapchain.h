@@ -21,11 +21,11 @@ namespace Velt::Renderer::Vulkan {
             virtual void* GetRenderPass() override { return reinterpret_cast<void*>(getRenderPass()); }
             virtual void* GetImageView(int index) override { return reinterpret_cast<void*>(getImageView(index)); }
             virtual size_t GetImageCount() const override { return imageCount(); }
-            virtual uint32_t GetWidth() const override { return width(); }
-            virtual uint32_t GetHeight() const override { return height(); }
+            virtual u32 GetWidth() const override { return width(); }
+            virtual u32 GetHeight() const override { return height(); }
             virtual float GetAspectRatio() const override { return extentAspectRatio(); }
-            virtual int AcquireNextImage(uint32_t& imageIndex) override { return static_cast<int>(acquireNextImage(imageIndex)); }
-            virtual int SubmitCommandBuffers(const void* buffers, uint32_t* imageIndex) override { return static_cast<int>(submitCommandBuffers(reinterpret_cast<const VkCommandBuffer*>(buffers), imageIndex)); }
+            virtual int AcquireNextImage(u32& imageIndex) override { return static_cast<int>(acquireNextImage(imageIndex)); }
+            virtual int SubmitCommandBuffers(const void* buffers, u32* imageIndex) override { return static_cast<int>(submitCommandBuffers(reinterpret_cast<const VkCommandBuffer*>(buffers), imageIndex)); }
 
             VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
             VkRenderPass getRenderPass() { return renderPass; }
@@ -33,8 +33,8 @@ namespace Velt::Renderer::Vulkan {
             size_t imageCount() { return swapChainImages.size(); }
             VkFormat getVulkanSwapchainImageFormat() { return swapChainImageFormat; }
             VkExtent2D getVulkanSwapchainExtent() { return swapChainExtent; }
-            uint32_t width() { return swapChainExtent.width; }
-            uint32_t height() { return swapChainExtent.height; }
+            u32 width() { return swapChainExtent.width; }
+            u32 height() { return swapChainExtent.height; }
 
             float extentAspectRatio()
             {
@@ -42,8 +42,8 @@ namespace Velt::Renderer::Vulkan {
             }
             VkFormat findDepthFormat();
 
-            VkResult acquireNextImage(uint32_t &imageIndex);
-            VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
+            VkResult acquireNextImage(u32 &imageIndex);
+            VkResult submitCommandBuffers(const VkCommandBuffer* buffers, u32* imageIndex);
 
         private:
             void init();

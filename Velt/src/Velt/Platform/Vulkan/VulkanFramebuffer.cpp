@@ -130,7 +130,7 @@ void VulkanFramebuffer::CreateRenderPass() {
     attachments.push_back(colorAttachment);
 
     VkAttachmentReference colorRef{};
-    colorRef.attachment = static_cast<uint32_t>(i);
+    colorRef.attachment = static_cast<u32>(i);
     colorRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     colorAttachmentRefs.push_back(colorRef);
   }
@@ -152,7 +152,7 @@ void VulkanFramebuffer::CreateRenderPass() {
     depthAttachment.finalLayout =
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
-    depthAttachmentRef.attachment = static_cast<uint32_t>(attachments.size());
+    depthAttachmentRef.attachment = static_cast<u32>(attachments.size());
     depthAttachmentRef.layout =
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
@@ -162,7 +162,7 @@ void VulkanFramebuffer::CreateRenderPass() {
   VkSubpassDescription subpass{};
   subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
   subpass.colorAttachmentCount =
-      static_cast<uint32_t>(colorAttachmentRefs.size());
+      static_cast<u32>(colorAttachmentRefs.size());
   subpass.pColorAttachments = colorAttachmentRefs.data();
   subpass.pDepthStencilAttachment = hasDepth ? &depthAttachmentRef : nullptr;
 
@@ -347,7 +347,7 @@ void VulkanFramebuffer::CreateFramebuffer() {
   VkFramebufferCreateInfo framebufferInfo{};
   framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
   framebufferInfo.renderPass = m_RenderPass;
-  framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+  framebufferInfo.attachmentCount = static_cast<u32>(attachments.size());
   framebufferInfo.pAttachments = attachments.data();
   framebufferInfo.width = m_Specification.Width;
   framebufferInfo.height = m_Specification.Height;
@@ -382,7 +382,7 @@ void VulkanFramebuffer::BeginRenderPass(VkCommandBuffer commandBuffer) {
     clearValues.push_back(depthClear);
   }
 
-  renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+  renderPassInfo.clearValueCount = static_cast<u32>(clearValues.size());
   renderPassInfo.pClearValues = clearValues.data();
 
   vkCmdBeginRenderPass(commandBuffer, &renderPassInfo,
@@ -432,7 +432,7 @@ int VulkanFramebuffer::ReadPixel(u32 attachmentIndex, int x, int y) {
   return 0; // Placeholder
 }
 
-void VulkanFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value) {
+void VulkanFramebuffer::ClearAttachment(u32 attachmentIndex, int value) {
   // TODO: Full impkementation:
   // outside RenderPass: vkCmdClearColorImage
   // inside RenderPass: vkCmdClearAttachments
@@ -440,13 +440,13 @@ void VulkanFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value) {
   assert(attachmentIndex < m_ColorImages.size());
 }
 
-uint32_t VulkanFramebuffer::FindMemoryType(uint32_t typeFilter,
+u32 VulkanFramebuffer::FindMemoryType(u32 typeFilter,
                                            VkMemoryPropertyFlags properties) {
   VkPhysicalDeviceMemoryProperties memProperties;
   vkGetPhysicalDeviceMemoryProperties(m_Device->getPhysicalDevice(),
                                       &memProperties);
 
-  for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+  for (u32 i = 0; i < memProperties.memoryTypeCount; i++) {
     if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags &
                                     properties) == properties) {
       return i;

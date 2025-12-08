@@ -1,21 +1,59 @@
+#pragma once
 #include "vtpch.h"
-#include "Velt/Renderer/RenderCommandBuffer.h"
 
-namespace Velt::Renderer::Vulkan
-{
-	class VELT_API VulkanCommandBuffer : public RenderCommandBuffer
+#include "Velt/Renderer/RenderCommandBuffer.h"
+#include "vulkan/vulkan.h"
+
+
+namespace Velt::Renderer::Vulkan {
+
+	class VulkanRenderCommandBuffer : public RenderCommandBuffer
 	{
 	public:
-		VulkanCommandBuffer(VkCommandBuffer commandBuffer)
-			: m_CommandBuffer(commandBuffer) {}
+		VulkanRenderCommandBuffer(u32 count = 0, std::string debugName = "");
+		VulkanRenderCommandBuffer(std::string debugName, bool swapchain);
+		~VulkanRenderCommandBuffer() override;
 
-		virtual void* GetNativeHandle() override { return m_CommandBuffer; }
 		virtual void Begin() override;
 		virtual void End() override;
-		virtual void Reset() override;
+		virtual void Submit() override;
 
-		inline VkCommandBuffer get() const { return m_CommandBuffer; }
+		virtual float GetExecutionGPUTime(u32 frameIndex, u32 queryIndex = 0) const override
+		{
+			if (queryIndex == UINT32_MAX || queryIndex / 2 >= m_TimestampNextAvailableQuery / 2)
+				return 0.0f;
+
+			return m_ExecutionGPUTimes[frameIndex][queryIndex / 2];
+		}
+
+		virtual u32 BeginTimestampQuery() override;
+		virtual void EndTimestampQuery(u32 queryID) override;
+
+		VkCommandBuffer GetActiveCommandBuffer() const { return m_ActiveCommandBuffer; }
+
+		VkCommandBuffer GetCommandBuffer(u32 frameIndex) const
+		{
+			VT_CORE_ASSERT(frameIndex < m_CommandBuffers.size());
+			return m_CommandBuffers[frameIndex];
+		}
 	private:
-		VkCommandBuffer m_CommandBuffer;
+		std::string m_DebugName;
+		VkCommandPool m_CommandPool = nullptr;
+		std::vector<VkCommandBuffer> m_CommandBuffers;
+		VkCommandBuffer m_ActiveCommandBuffer = nullptr;
+		std::vector<VkFence> m_WaitFences;
+
+		bool m_OwnedBySwapChain = false;
+
+		u32 m_TimestampQueryCount = 0;
+		u32 m_TimestampNextAvailableQuery = 2;
+		std::vector<VkQueryPool> m_TimestampQueryPools;
+		std::vector<VkQueryPool> m_PipelineStatisticsQueryPools;
+		std::vector<std::vector<uint64_t>> m_TimestampQueryResults;
+		std::vector<std::vector<float>> m_ExecutionGPUTimes;
+
+		u32 m_PipelineQueryCount = 0;
+		std::vector<PipelineStatistics> m_PipelineStatisticsQueryResults;
 	};
+
 }

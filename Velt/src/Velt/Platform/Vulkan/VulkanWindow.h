@@ -10,7 +10,7 @@ namespace Velt::Renderer::Vulkan
         VulkanWindow(RenderAPI::Window& window) : m_Window(window) {}
 
         void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
-        VkExtent2D getExtent() const { return { static_cast<uint32_t>(m_Window.GetWidth()), static_cast<uint32_t>(m_Window.GetHeight()) }; }
+        VkExtent2D getExtent() const { return { static_cast<u32>(m_Window.GetWidth()), static_cast<u32>(m_Window.GetHeight()) }; }
 
         RenderAPI::Window& GetWindow() { return m_Window; }
 

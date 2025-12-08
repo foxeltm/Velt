@@ -117,13 +117,13 @@ namespace Velt::Renderer::Vulkan {
 
 
             auto extensions = getRequiredExtensions();
-            createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+            createInfo.enabledExtensionCount = static_cast<u32>(extensions.size());
             createInfo.ppEnabledExtensionNames = extensions.data();
 
             VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
             if (enableValidationLayers)
             {
-                createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+                createInfo.enabledLayerCount = static_cast<u32>(validationLayers.size());
                 createInfo.ppEnabledLayerNames = validationLayers.data();
 
                 populateDebugMessengerCreateInfo(debugCreateInfo);
@@ -147,7 +147,7 @@ namespace Velt::Renderer::Vulkan {
         void VulkanDevice::pickPhysicalDevice()
         {
             VT_PROFILE_FUNCTION();
-            uint32_t deviceCount = 0;
+            u32 deviceCount = 0;
             vkEnumeratePhysicalDevices(m_Instance, &deviceCount, nullptr);
             if (deviceCount == 0)
             {
@@ -182,10 +182,10 @@ namespace Velt::Renderer::Vulkan {
             QueueFamilyIndices indices = findQueueFamilies(m_PhysicalDevice);
 
             std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-            std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
+            std::set<u32> uniqueQueueFamilies = { indices.graphicsFamily, indices.presentFamily };
 
             float queuePriority = 1.0f;
-            for (uint32_t queueFamily : uniqueQueueFamilies)
+            for (u32 queueFamily : uniqueQueueFamilies)
             {
                 VkDeviceQueueCreateInfo queueCreateInfo = {};
                 queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -201,18 +201,18 @@ namespace Velt::Renderer::Vulkan {
             VkDeviceCreateInfo createInfo = {};
             createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
-            createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+            createInfo.queueCreateInfoCount = static_cast<u32>(queueCreateInfos.size());
             createInfo.pQueueCreateInfos = queueCreateInfos.data();
 
             createInfo.pEnabledFeatures = &deviceFeatures;
-            createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+            createInfo.enabledExtensionCount = static_cast<u32>(deviceExtensions.size());
             createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
             // might not really be necessary anymore because device specific validation layers
             // have been deprecated
             if (enableValidationLayers)
             {
-                createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+                createInfo.enabledLayerCount = static_cast<u32>(validationLayers.size());
                 createInfo.ppEnabledLayerNames = validationLayers.data();
             }
             else
@@ -306,7 +306,7 @@ namespace Velt::Renderer::Vulkan {
         bool VulkanDevice::checkValidationLayerSupport()
         {
             VT_PROFILE_FUNCTION();
-            uint32_t layerCount;
+            u32 layerCount;
             vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
             std::vector<VkLayerProperties> availableLayers(layerCount);
@@ -338,7 +338,7 @@ namespace Velt::Renderer::Vulkan {
         {
             VT_PROFILE_FUNCTION();
             // Get SDL3 required Vulkan instance extensions
-            uint32_t sdlExtensionCount = 0;
+            u32 sdlExtensionCount = 0;
             const char* const* sdlExtensions = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
 
             std::vector<const char*> extensions;
@@ -364,7 +364,7 @@ namespace Velt::Renderer::Vulkan {
         void VulkanDevice::hasSDLRequiredInstanceExtensions()
         {
             VT_PROFILE_FUNCTION();
-            uint32_t extensionCount = 0;
+            u32 extensionCount = 0;
             vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
             std::vector<VkExtensionProperties> extensions(extensionCount);
             vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
@@ -393,7 +393,7 @@ namespace Velt::Renderer::Vulkan {
         bool VulkanDevice::checkDeviceExtensionSupport(VkPhysicalDevice device)
         {
             VT_PROFILE_FUNCTION();
-            uint32_t extensionCount;
+            u32 extensionCount;
             vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
             std::vector<VkExtensionProperties> availableExtensions(extensionCount);
@@ -418,7 +418,7 @@ namespace Velt::Renderer::Vulkan {
             VT_PROFILE_FUNCTION();
             QueueFamilyIndices indices;
 
-            uint32_t queueFamilyCount = 0;
+            u32 queueFamilyCount = 0;
             vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
             std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
@@ -456,7 +456,7 @@ namespace Velt::Renderer::Vulkan {
             SwapChainSupportDetails details;
             vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_Surface, &details.capabilities);
 
-            uint32_t formatCount;
+            u32 formatCount;
             vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, nullptr);
 
             if (formatCount != 0)
@@ -465,7 +465,7 @@ namespace Velt::Renderer::Vulkan {
                 vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, details.formats.data());
             }
 
-            uint32_t presentModeCount;
+            u32 presentModeCount;
             vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, nullptr);
 
             if (presentModeCount != 0)
@@ -502,12 +502,12 @@ namespace Velt::Renderer::Vulkan {
             throw std::runtime_error("failed to find supported format!");
         }
 
-        uint32_t VulkanDevice::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+        u32 VulkanDevice::findMemoryType(u32 typeFilter, VkMemoryPropertyFlags properties)
         {
             VT_PROFILE_FUNCTION();
             VkPhysicalDeviceMemoryProperties memProperties;
             vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice, &memProperties);
-            for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
+            for (u32 i = 0; i < memProperties.memoryTypeCount; i++)
             {
                 if ((typeFilter & (1 << i)) &&
                     (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
@@ -608,7 +608,7 @@ namespace Velt::Renderer::Vulkan {
         }
 
         void VulkanDevice::copyBufferToImage(
-            VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount)
+            VkBuffer buffer, VkImage image, u32 width, u32 height, u32 layerCount)
         {
             VT_PROFILE_FUNCTION();
             VkCommandBuffer commandBuffer = beginSingleTimeCommands();

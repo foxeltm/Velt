@@ -19,8 +19,8 @@ namespace Velt::Renderer::Vulkan {
 
         struct QueueFamilyIndices
         {
-            uint32_t graphicsFamily;
-            uint32_t presentFamily;
+            u32 graphicsFamily;
+            u32 presentFamily;
             bool graphicsFamilyHasValue = false;
             bool presentFamilyHasValue = false;
             bool isComplete() { return graphicsFamilyHasValue && presentFamilyHasValue; }
@@ -50,11 +50,11 @@ namespace Velt::Renderer::Vulkan {
             virtual void* GetPresentQueue() override { return presentQueue(); }
             virtual void* GetInstance() override { return getInstance(); }
 
-            virtual void CreateBuffer(size_t size, uint32_t usage, uint32_t properties, void** buffer, void** bufferMemory) override;
+            virtual void CreateBuffer(size_t size, u32 usage, u32 properties, void** buffer, void** bufferMemory) override;
             virtual void* BeginSingleTimeCommands() override { return beginSingleTimeCommands(); }
             virtual void EndSingleTimeCommands(void* commandBuffer) override { endSingleTimeCommands(static_cast<VkCommandBuffer>(commandBuffer)); }
             virtual void CopyBuffer(void* srcBuffer, void* dstBuffer, size_t size) override { copyBuffer(static_cast<VkBuffer>(srcBuffer), static_cast<VkBuffer>(dstBuffer), size); }
-            virtual uint32_t FindMemoryType(uint32_t typeFilter, uint32_t properties) override { return findMemoryType(typeFilter, properties); }
+            virtual u32 FindMemoryType(u32 typeFilter, u32 properties) override { return findMemoryType(typeFilter, properties); }
 
             VkCommandPool getCommandPool() { return m_CommandPool; }
             VkDevice device() { return m_Device; }
@@ -64,11 +64,11 @@ namespace Velt::Renderer::Vulkan {
             VkInstance getInstance() { return m_Instance; }
             VkPhysicalDevice getPhysicalDevice() { return m_PhysicalDevice; }
             VkQueue getGraphicsQueue() { return m_GraphicsQueue; }
-            uint32_t getQueueFamilyIndex() { return findPhysicalQueueFamilies().graphicsFamily; }
+            u32 getQueueFamilyIndex() { return findPhysicalQueueFamilies().graphicsFamily; }
             RenderAPI::Window& getWindow() { return m_Window; }
             
             SwapChainSupportDetails getSwapChainSupport() { return querySwapChainSupport(m_PhysicalDevice); }
-            uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+            u32 findMemoryType(u32 typeFilter, VkMemoryPropertyFlags properties);
             QueueFamilyIndices findPhysicalQueueFamilies() { return findQueueFamilies(m_PhysicalDevice); }
             VkFormat findSupportedFormat(
                 const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
@@ -84,7 +84,7 @@ namespace Velt::Renderer::Vulkan {
             void endSingleTimeCommands(VkCommandBuffer commandBuffer);
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
             void copyBufferToImage(
-                VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
+                VkBuffer buffer, VkImage image, u32 width, u32 height, u32 layerCount);
 
             void createImageWithInfo(
                 const VkImageCreateInfo& imageInfo,

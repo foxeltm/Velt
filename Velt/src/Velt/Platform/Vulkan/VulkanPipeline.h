@@ -20,7 +20,7 @@ namespace Velt::Renderer::Vulkan
 			VkPipelineDynamicStateCreateInfo dynamicStateInfo;
 			VkPipelineLayout pipelineLayout = nullptr;
 			VkRenderPass renderPass = nullptr;
-			uint32_t subpass = 0;
+			u32 subpass = 0;
 		};
 
 		class VELT_API VulkanPipeline : public Renderer::Pipeline

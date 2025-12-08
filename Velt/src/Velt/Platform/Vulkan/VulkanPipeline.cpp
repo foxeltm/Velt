@@ -90,8 +90,8 @@ namespace Velt::Renderer::Vulkan {
 			VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 
 			vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-			vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-			vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
+			vertexInputInfo.vertexAttributeDescriptionCount = static_cast<u32>(attributeDescriptions.size());
+			vertexInputInfo.vertexBindingDescriptionCount = static_cast<u32>(bindingDescriptions.size());
 			vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 			vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
 			
@@ -131,7 +131,7 @@ namespace Velt::Renderer::Vulkan {
 			VkShaderModuleCreateInfo createInfo{};
 			createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 			createInfo.codeSize = code.size();
-			createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+			createInfo.pCode = reinterpret_cast<const u32*>(code.data());
 
 			if (vkCreateShaderModule(m_Device.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) 
 			{
@@ -222,7 +222,7 @@ namespace Velt::Renderer::Vulkan {
 			};
 			configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO; // set the struct type member
 			configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStatesEnable.data();
-			configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStatesEnable.size());
+			configInfo.dynamicStateInfo.dynamicStateCount = static_cast<u32>(configInfo.dynamicStatesEnable.size());
 			configInfo.dynamicStateInfo.flags = 0;
 
 		}

@@ -114,7 +114,7 @@ target_include_directories(Velt
         ${CMAKE_SOURCE_DIR}/Velt/src/Velt
 )
 
-target_precompile_headers(Velt PUBLIC ${CMAKE_SOURCE_DIR}/Velt/src/lvpch.h)
+target_precompile_headers(Velt PUBLIC ${CMAKE_SOURCE_DIR}/Velt/src/vtpch.h)
 
 message(STATUS "VL_BUILD_DLL is defined: ${VL_BUILD_DLL}")
 get_target_property(COMPILE_DEFS Velt COMPILE_DEFINITIONS)

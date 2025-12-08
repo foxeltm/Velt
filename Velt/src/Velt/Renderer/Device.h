@@ -16,12 +16,12 @@ namespace Velt::Renderer
 		virtual void* GetPresentQueue() = 0;
 		virtual void* GetInstance() = 0;
 
-		virtual void CreateBuffer(size_t size, uint32_t usage, uint32_t properties, void** buffer, void** bufferMemory) = 0;
+		virtual void CreateBuffer(size_t size, u32 usage, u32 properties, void** buffer, void** bufferMemory) = 0;
 		virtual void* BeginSingleTimeCommands() = 0;
 		virtual void EndSingleTimeCommands(void* commandBuffer) = 0;
 		virtual void CopyBuffer(void* srcBuffer, void* dstBuffer, size_t size) = 0;
 
-		virtual uint32_t FindMemoryType(uint32_t typeFilter, uint32_t properties) = 0;
+		virtual u32 FindMemoryType(u32 typeFilter, u32 properties) = 0;
 
 		static Ref<Device> Create(void* window);
 	};

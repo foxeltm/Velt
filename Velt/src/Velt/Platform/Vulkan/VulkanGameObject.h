@@ -19,7 +19,7 @@ namespace Velt::Renderer::Vulkan
 
 		static GameObject createGameObject()
 		{
-			static uint32_t currentID = 0;
+			static u32 currentID = 0;
 			return GameObject{ currentID++ };
 		}
 
@@ -29,14 +29,14 @@ namespace Velt::Renderer::Vulkan
 		GameObject& operator=(GameObject &&) = default;
 
 
-		uint32_t getID() const { return id; }
+		u32 getID() const { return id; }
 
 		std::shared_ptr<Renderer::Vulkan::Model> model;
 		glm::vec3 color; 
 
 	private:
-		GameObject(uint32_t objInt) : id{ objInt } {};
+		GameObject(u32 objInt) : id{ objInt } {};
 		
-		uint32_t id;
+		u32 id;
 	};
 }
