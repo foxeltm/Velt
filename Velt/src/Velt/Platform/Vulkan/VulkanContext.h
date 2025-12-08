@@ -19,10 +19,10 @@ namespace Velt::Renderer::Vulkan
 		static std::weak_ptr<VulkanDevice> getDevice() { return s_Device; }
 		static std::weak_ptr<VulkanSwapchain> getSwapchain() { return s_Swapchain; }
 		static std::weak_ptr<VulkanPipeline> getPipeline() { return s_Pipeline; }
-
+		
 	private:
-		static std::weak_ptr<VulkanDevice> s_Device;
-		static std::weak_ptr<VulkanSwapchain> s_Swapchain;
-		static std::weak_ptr<VulkanPipeline> s_Pipeline;
+		static VulkanDevice* s_Device = nullptr;
+		static VulkanSwapchain* s_Swapchain = nullptr;
+		static VulkanPipeline* s_Pipeline = nullptr;
 	};
 }

@@ -1,7 +1,9 @@
 #pragma once
 #include "vtpch.h"
-#include "VulkanDevice. h"
+#include "VulkanDevice.h"
 #include "Velt/Renderer/Swapchain.h"
+#include "Velt/Renderer/Framebuffer.h"
+#include "Velt/Renderer/RenderPass.h"
 
 namespace Velt::Renderer::Vulkan {
 
@@ -17,18 +19,18 @@ namespace Velt::Renderer::Vulkan {
         VulkanSwapchain(const VulkanSwapchain&) = delete;
         void operator=(const VulkanSwapchain&) = delete;
 
-        virtual VkFramebuffer* GetFramebuffer(int index) override { return reinterpret_cast<void*>(getFrameBuffer(index)); }
-        virtual void* GetRenderPass() override { return reinterpret_cast<void*>(getRenderPass()); }
+        virtual Framebuffer* GetFramebuffer(int index) override { return reinterpret_cast<void*>(getFrameBuffer(index)); }
+        virtual Renderpass* GetRenderPass() override { return reinterpret_cast<void*>(getRenderPass()); }
         virtual void* GetImageView(int index) override { return reinterpret_cast<void*>(getImageView(index)); }
         // virtual size_t GetImageCount() const override { return swapChainImages.size(); }
         virtual u32 GetWidth() const override { return swapChainExtent.width; }
-        virtual u32 GetHeight() const override { return swapChainExtent. height; }
+        virtual u32 GetHeight() const override { return swapChainExtent.height; }
         virtual float GetAspectRatio() const override { return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height); }
         virtual int AcquireNextImage(u32& imageIndex) override { return static_cast<int>(acquireNextImage(imageIndex)); }
         virtual int SubmitCommandBuffers(const void* buffers, u32* imageIndex) override { return static_cast<int>(submitCommandBuffers(reinterpret_cast<const VkCommandBuffer*>(buffers), imageIndex)); }
 
-        VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
-        VkRenderPass getRenderPass() { return renderPass; }
+        Framebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
+        Renderpass getRenderPass() { return renderPass; }
         VkImageView getImageView(int index) { return swapChainImageViews[index]; }
         size_t imageCount() { return swapChainImages.size(); }
         VkFormat getVulkanSwapchainImageFormat() { return swapChainImageFormat; }
@@ -63,8 +65,8 @@ namespace Velt::Renderer::Vulkan {
         VkFormat swapChainImageFormat;
         VkExtent2D swapChainExtent;
 
-        std::vector<VkFramebuffer> swapChainFramebuffers;
-        VkRenderPass renderPass;
+        std::vector<Framebuffer> swapChainFramebuffers;
+        Renderpass renderPass;
 
         std::vector<VkImage> depthImages;
         std::vector<VkDeviceMemory> depthImageMemorys;
