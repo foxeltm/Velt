@@ -19,18 +19,18 @@ namespace Velt::Renderer::Vulkan
             VkDeviceSize vertexStride
         );
 
-        ~VulkanVertexBuffer() override;
+        virtual ~VulkanVertexBuffer() override;
 
-        void Bind() const override;
-        void Unbind() const override;
+        virtual void Bind() const override;
+        virtual void Unbind() const override;
 
-        u32 GetVertexCount() const override { return m_VertexCount; }
+        u32 GetVertexCount() const { return m_VertexCount; }
 
     private:
         void CreateBuffer(const void* data);
 
     private:
-        const VulkanDevice& m_Device;
+        VulkanDevice* m_Device = VulkanContext::getDevice();        
 
         VkBuffer m_VertexBuffer = VK_NULL_HANDLE;
         VkDeviceMemory m_VertexBufferMemory = VK_NULL_HANDLE;
