@@ -12,7 +12,7 @@ namespace Velt::Renderer::Vulkan
 		virtual ~VulkanIndexBuffer();
 
 
-		virtual void CreateBuffer(void* buffer, u64 size, u64 offset = 0) override;
+		virtual void CreateBuffer(void* data, u64 size, u64 offset = 0) override;
 		virtual void Bind() const override;
 
 
